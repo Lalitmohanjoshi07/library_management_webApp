@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const secret_keys = require('../keys.js')
+const JWT_secret = require('../keys.js')
 
 
 const router = express.Router();
@@ -10,13 +10,14 @@ const router = express.Router();
 // Login route
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
+    // console.log(email, password)
   try {
     // Check if the user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    // console.log(user, JWT_secret)
 
     // Compare the password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -27,7 +28,7 @@ router.post('/login', async (req, res) => {
     // Create a JWT token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
-      secret_keys.secret_keys, // Secret key for JWT
+      JWT_secret, // Secret key for JWT
     );
 
     // Send the token and user info
