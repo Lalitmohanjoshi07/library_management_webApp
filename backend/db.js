@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const URI = 'mongodb://127.0.0.1/library_management_system'
+const URI = 'mongodb://localhost:27017/library_management_system'
 
 const connectToDb= async()=>{
     mongoose.connect(URI,
